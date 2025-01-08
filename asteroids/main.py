@@ -10,6 +10,9 @@ from constants import (
     TICK_RATE
 )
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
+from shot import Shot
 
 
 def main():
@@ -22,29 +25,49 @@ def main():
     clock = pygame.time.Clock()
     delta = 0
 
-    # initialize player
+    # grouping classes for object/state categories
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
+    shots = pygame.sprite.Group()
+
+    Player.containers = (updatable, drawable)
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = (updatable)
+    Shot.containers = (updatable, drawable, shots)
+
+    # initialize objects or classes of them
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    asteroidField = AsteroidField()
 
     # enter game loop
-    gameLoop(screen, clock, delta, player)
-
-
-def gameLoop(screen, clock, delta, player):
-
     while True:
         # backdrop
         screen.fill((0, 0, 0))
-        
+
         # process game events:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
 
-        # update objects:
-        player.update(delta)
+        # update objects
+        for obj in updatable:
+            obj.update(delta)
 
-        # draw objects on screen
-        player.draw(screen)
+        # check collisions
+        for a in asteroids:
+            if a.isColliding(player):
+                print("Game over!")
+                return
+
+            for s in shots:
+                if s.isColliding(a):
+                    s.kill()
+                    a.split()
+
+        # draw objects
+        for obj in drawable:
+            obj.draw(screen)
 
         # Render updates
         pygame.display.flip()
