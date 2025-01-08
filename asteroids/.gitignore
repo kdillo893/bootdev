@@ -1,0 +1,4 @@
+__pycache__/
+
+# I don't have venv here, but just in case
+venv
