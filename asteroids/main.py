@@ -6,7 +6,8 @@ from constants import (
     ASTEROID_KINDS,
     ASTEROID_MAX_RADIUS,
     ASTEROID_MIN_RADIUS,
-    ASTEROID_SPAWN_RATE
+    ASTEROID_SPAWN_RATE,
+    TICK_RATE
 )
 from player import Player
 
@@ -19,31 +20,37 @@ def main():
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
     clock = pygame.time.Clock()
-    delt = 0
+    delta = 0
 
     # initialize player
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
-    gameLoop(screen, clock, delt, player)
+    # enter game loop
+    gameLoop(screen, clock, delta, player)
 
-    pass
 
-
-def gameLoop(screen, clock, delt, player):
+def gameLoop(screen, clock, delta, player):
 
     while True:
-        # process events:
+        # backdrop
+        screen.fill((0, 0, 0))
+        
+        # process game events:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
 
-        screen.fill((0, 0, 0))
+        # update objects:
+        player.update(delta)
+
+        # draw objects on screen
         player.draw(screen)
 
-        # screen refresh after changes made
+        # Render updates
         pygame.display.flip()
-        # tick wait:
-        delt = clock.tick(60) / 1000
+
+        # tick wait, update time delta:
+        delta = clock.tick(TICK_RATE) / 1000
 
 
 if __name__ == "__main__":
