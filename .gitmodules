@@ -1,0 +1,3 @@
+[submodule "bookbot"]
+	path = bookbot
+	url = git@github.com:kdillo893/bookbot.git
