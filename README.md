@@ -14,5 +14,5 @@ I forget what this is from.
 ## [HTTP in Go](httpgo)
 Go implementations of HTTP server/client
 
-## [Bookbot](./bookbot)
+## [Bookbot](https://github.com/kdillo893/bookbot)
 Simple word scanning thing to search for words within text (eg a book). This is in a separate repo
